@@ -9,12 +9,13 @@
 <body>
     <h1>Läs in en bild med JS</h1>
     <img id="input" src="image.jpg" alt="huntten" hidden="true" />
-    <canvas id="canvas" height="200"></canvas>
+    <canvas id="canvas"></canvas>
 
     <script>
         window.onload = function() {
             var context = canvas.getContext("2d");
             var img = document.getElementById("input");
+            document.getElementById("canvas").height = img.height; // Set canvas
             context.drawImage(img,0,0);
             var imageData = context.getImageData(0,0, img.width, img.height);
             console.log(imageData);
