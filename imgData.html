@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Läs in en bild som en JS Array</title>
+</head>
+<body>
+    <h1>Läs in en bild med JS</h1>
+    <img id="input" src="image.jpg" alt="huntten" hidden="true" />
+    <canvas id="canvas" height="200"></canvas>
+
+    <script>
+        window.onload = function() {
+            var context = canvas.getContext("2d");
+            var img = document.getElementById("input");
+            context.drawImage(img,0,0);
+            var imageData = context.getImageData(0,0, img.width, img.height);
+            console.log(imageData);
+        }
+    </script>
+    
+</body>
+</html>
