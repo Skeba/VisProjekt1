@@ -8,17 +8,35 @@
 </head>
 <body>
     <h1>Läs in en bild med JS</h1>
+    <!-- New Code -->
+    <input type="file" id="infile">
+    <!-- Old Code -->
     <img id="input" src="image.jpg" alt="huntten" hidden="true" />
     <canvas id="canvas"></canvas>
 
     <script>
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
         window.onload = function() {
-            var context = canvas.getContext("2d");
+            
             var img = document.getElementById("input");
-            document.getElementById("canvas").height = img.height; // Set canvas
+            canvas.height = img.height; // Set canvas
             context.drawImage(img,0,0);
             var imageData = context.getImageData(0,0, img.width, img.height);
             console.log(imageData);
+            // Reagera på uppladdad fil
+            document.getElementById("infile").addEventListener("change", handleFile);
+        }
+
+        function handleFile(event) 
+        {
+            var reader = new FileReader; // Object with sole purpose of reading data from Blob
+            reader.readAsDataURL(event.target.files[0]); // Read binary data encode as B64
+            reader.onload = function(ev)
+            {
+                var img = new Image;
+                img.src = event.target.result;
+            }
         }
     </script>
     
