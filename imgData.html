@@ -35,7 +35,14 @@
             reader.onload = function(ev)
             {
                 var img = new Image;
-                img.src = event.target.result;
+                img.src = ev.target.result;
+                img.onload = function ()
+                {
+                    canvas.height = img.height; // Set canvas
+                    context.drawImage(img,0,0);
+                    var imageData = context.getImageData(0,0, img.width, img.height);
+                    console.log(imageData);
+                }
             }
         }
     </script>
