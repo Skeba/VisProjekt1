@@ -37,5 +37,15 @@ function drawChart()
             .attr("stroke","blue")
             .attr("d", path(dataArray));
 
+        var dotsGroup = canvas.append('g');
+
+        // Lägg till punkter till datapunkterna
+        canvas.selectAll('dots').data(dataArray)
+            .enter()
+                .append('circle')
+                .attr('cx', function(data) { return data.x * 6 } )
+                .attr('cy', function(data) { return data.y * 6 } )
+                .attr('r','2')
+
     });
 }

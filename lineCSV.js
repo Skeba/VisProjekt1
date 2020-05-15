@@ -50,6 +50,16 @@ function drawChart()
             .attr('fill', 'none')
             .attr('stroke', 'blue')
             .attr('d', dString(dataFix));
+
+        var dotsGroup = canvas.append('g');
+
+        // Lägg till punkter till datapunkterna
+        dotsGroup.selectAll('dots').data(dataFix)
+            .enter()
+                .append('circle')
+                .attr('cx', function(d) { return xScale(d.month) })
+                .attr('cy', function(d) { return yScale(d.temp) })
+                .attr('r','2')
     });
 
     // d3 ES6 V5 SYNTAx
