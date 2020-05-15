@@ -23,7 +23,8 @@ function drawChart()
         console.log(temps);
 
         // Skapa ritunderlag
-        var width = 400, height = 200, margin = 20;
+        var width = 700, height = 200, margin = 20;
+        var charWidth = width-(margin*2), charHeight = height - (margin*2);
         var canvas = d3.select('body')
             .append('svg')
             .attr('width', width)
@@ -32,12 +33,12 @@ function drawChart()
         // Skapa orinal scale baserat på månaderna
         var xScale = d3.scaleBand()
             .domain(months)
-            .range([0,width-margin*2]);
+            .range([0,charWidth]);
 
         // vi behöver en skala, för temperatur passar en lineär skala
         var yScale = d3.scaleLinear()
             .domain([d3.min(temps), d3.max(temps)]) // vilka värden ska konveretas till pixelvärden
-            .range([height-margin*2,0]);
+            .range([charHeight,0]);
 
 
         // Generera D strängen för path
@@ -55,7 +56,8 @@ function drawChart()
         chartGroup.append('path')
             .attr('fill', 'none')
             .attr('stroke', 'blue')
-            .attr('d', dString(dataFix));
+            .attr('d', dString(dataFix))
+            .attr("transform","translate("+charWidth/months.length/2+",0)");
 
         
 
@@ -65,10 +67,11 @@ function drawChart()
                 .append('circle')
                 .attr('cx', function(d) { return xScale(d.month) })
                 .attr('cy', function(d) { return yScale(d.temp) })
-                .attr('r','2');
+                .attr('r','2')
+                .attr("transform","translate("+charWidth/months.length/2+",0)");
 
         chartGroup.append("g").call(yAxis);
-        chartGroup.append("g").call(xAxis);
+        chartGroup.append("g").call(xAxis).attr("transform", "translate(0,"+charHeight+")");
     });
 
     // d3 ES6 V5 SYNTAx
