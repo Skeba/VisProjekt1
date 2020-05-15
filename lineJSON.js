@@ -10,15 +10,15 @@ function drawChart()
 
         // Ytterst viktigt för projekt 1
         // Skapa arrays för att lagra x och y värden
-        var xs = [];
-        var ys = [];
+        // var xs = [];
+        // var ys = [];
         // Gå igenom dataarrayn och hämta x samt y
-        for(i=0; i<dataArray.length; i++)
-        {
-            xs.push(dataArray[i].x); // Push för att lägga till ett värde till en array
-            ys.push(dataArray[i].y);
-        }
-        console.log(xs);
+        // for(i=0; i<dataArray.length; i++)
+        // {
+        //     xs.push(dataArray[i].x); // Push för att lägga till ett värde till en array
+        //     ys.push(dataArray[i].y);
+        // }
+        // console.log(xs);
 
         // Skapa vårt ritunderlag
         var canvas = d3.select("body")
