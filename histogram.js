@@ -20,21 +20,21 @@ function drawHistogram ()
         console.log(heights);
 
         // Skapa klasser enligt längder
-        var klasser = ["160-169", "170-179", "180-189", "190-199", "200-209"
+        var klasser = ["180-189", "190-199", "200-209"
                     , "210-219", "220-229", "230-239"];
         // Ändra y axeln till frekvenser
         var frekvenser = []; // Spara antalet spelare av en viss längd
         var klassStorlek = 10; // binsize 160-169
-        var klass = 160; // håller koll på vilken klass vi är i. Börjar med minsta
+        var klass = 180; // håller koll på vilken klass vi är i. Börjar med minsta
         var antalKlasser = klasser.length;
 
         // Räkna antalet spelare i varje längdklass
         for(i=0; i<antalKlasser; i++)
         {
             var frekvens = 0; // Iterand som räknar hur många som hör till en klass
-            for (j=0; j < height.length; j++)
+            for (j=0; j < heights.length; j++)
             {
-                if (height[j] >= klass && heights[j] < klass+klassStorlek)
+                if (heights[j] >= klass && heights[j] < klass+klassStorlek)
                 {
                     frekvens++;
                 }
@@ -47,7 +47,7 @@ function drawHistogram ()
             .domain(klasser)
             .range([0,chartWidth]);
         var yScale = d3.scaleLinear()
-            .domain([0,d3.max(heights)])
+            .domain([0,d3.max(frekvenser)])
             .range([chartHeight, 0]);
         // Skapa Y och X axel
         var xAxis = d3.axisBottom(xScale);
@@ -63,11 +63,11 @@ function drawHistogram ()
         var chartGroup = canvas.append("g").attr("transform", "translate("+margin+","+margin+")");
 
         // Rita in staplar
-        chartGroup.selectAll("staplar").data(heights).enter()
+        chartGroup.selectAll("staplar").data(frekvenser).enter()
             .append("rect")
             .attr("width", barWidth)
             .attr("height", function(data, i) { return chartHeight - yScale(data) } )
-            .attr("x", function(data, i) { return i * (barWidth + barPadding) } )
+            .attr("x", function(data, i) { return i * (chartWidth / antalKlasser) + barWidth/2 } )
             .attr("y", function(data, i) { return yScale(data) } );
 
         // Rita axlar
