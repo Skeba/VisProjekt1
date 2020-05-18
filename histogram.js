@@ -20,7 +20,7 @@ function drawHistogram ()
         console.log(heights);
 
         // Skapa klasser enligt längder
-        var klasser = ["180-189", "190-199", "200-209"
+        var klasser = ["170-179","180-189", "190-199", "200-209"
                     , "210-219", "220-229", "230-239"];
         // Ändra y axeln till frekvenser
         var frekvenser = []; // Spara antalet spelare av en viss längd
