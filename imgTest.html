@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Läs in en bild som en JS Array</title>
+    <script src="https://d3js.org/d3.v5.js"></script>
+
 </head>
 <body>
     <h1>Läs in en bild med JS</h1>
@@ -21,9 +23,10 @@
     <pre class="brush: js">
         <script>
         var img = new Image();
-        img.src = 'cat.jpg';
+        img.src = 'image.jpg';
+
         img.onload = function() {
-            draw(this);
+            drawHistogram3(this);
         };
 
         function draw(img) {
@@ -58,6 +61,68 @@
             var grayscalebtn = document.getElementById('grayscalebtn');
             grayscalebtn.addEventListener('click', grayscale);
         }
+        
+        function drawHistogram3(img)
+        {
+            var width = 600, height = 300, margin = 30;
+            var chartWidth =  width - (margin*2);
+            var chartHeight = height - (margin*2);
+            var barWidth = 1, barPadding = 5;
+
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            img.style.display = 'none';
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var data = imageData.data;
+
+            // Laddar in datan
+            var heights = [], names = [];
+            for(var i = 0; i < data.length; i += 4)
+            {
+                // Avrundar värderna ifall bilden inte skulle vara svartvit
+                var avg = (data[i] + data[i + 1] + data[i + 2]) / 3; 
+                heights.push(avg);
+                names.push(avg);
+            }
+            console.log(heights);
+            console.log(names);
+
+            var antalKlasser = heights.length;
+
+            var xScale = d3.scaleBand()
+            .domain(antalKlasser)
+            .range([0,chartWidth]);
+            var yScale = d3.scaleLinear()
+                .domain([0,d3.max(antalKlasser)])
+                .range([chartHeight, 0]);
+            // Skapa Y och X axel
+            var xAxis = d3.axisBottom(xScale);
+            var yAxis = d3.axisLeft(yScale);
+
+            // Skapa ritunderlag
+            var canvas = d3.select("body")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            // Skapa en grupp som inte täcker hela ritunderlaget
+            var chartGroup = canvas.append("g").attr("transform", "translate("+margin+","+margin+")");
+
+            // Rita in staplar
+            chartGroup.selectAll("staplar").data(antalKlasser).enter()
+                .append("rect")
+                .attr("width", barWidth)
+                .attr("height", function(data, i) { return chartHeight - yScale(data) } )
+                .attr("x", function(data, i) { return i * (chartWidth / antalKlasser) + barWidth/2 } )
+                .attr("y", function(data, i) { return yScale(data) } );
+
+            // Rita axlar
+            chartGroup.append("g").call(yAxis);
+            chartGroup.append("g").call(xAxis)
+                .attr("transform", "translate(0,"+chartHeight+")");
+        }
+        // drawHistogram3(this);
         </script>
             </pre>
             
