@@ -1,7 +1,9 @@
-function arrayOccurrences(arr) {
+function arrayOccurrences(array) {
     var number = [], occurrences = [], prev;
-    
-    //arr.sort();
+    // Vi vill behålla vår array, så vi använder slice istället för push
+    var arr = array.slice();
+    // Denna functions klarar av att sortera Integers
+    arr.sort(function(a, b){return a - b});
     for ( var i = 0; i < arr.length; i++ ) {
         if ( arr[i] !== prev ) {
             number.push(arr[i]);
@@ -51,15 +53,18 @@ function histogram(img)
     console.log(pixels);
     console.log("amount");
     console.log(amount);
+    console.log(amount[0][0]);
+    console.log(heights);
 
 
     var antalKlasser = result[1].length;
+    console.log(antalKlasser);
 
     var xScale = d3.scaleBand()
     .domain(antalKlasser)
     .range([0,chartWidth]);
     var yScale = d3.scaleLinear()
-        .domain([0,d3.max(result[1])])
+        .domain([0,d3.max(amount[0])])
         .range([chartHeight, 0]);
     // Skapa Y och X axel
     var xAxis = d3.axisBottom(xScale);
