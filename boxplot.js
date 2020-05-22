@@ -47,7 +47,6 @@ function drawBoxplot()
 
         // Rita en linje från Q3 till maxvärdet
         chartGroup.append("line")
-            .attr("width", 5)
             .attr("stroke", "black")
             .attr("x1",xScale(min))
             .attr("x2",xScale(max))
@@ -65,7 +64,6 @@ function drawBoxplot()
 
         // Rita en linje från Qmin till Q2
         chartGroup.append("line")
-            .attr("width", 5)
             .attr("stroke", "black")
             .attr("x1",xScale(min))
             .attr("x2",xScale(min))
@@ -73,7 +71,6 @@ function drawBoxplot()
             .attr("y2", boxPosition+boxHeight - 10);
 
         chartGroup.append("line")
-            .attr("width", 5)
             .attr("stroke", "black")
             .attr("x1",xScale(max))
             .attr("x2",xScale(max))
@@ -81,7 +78,6 @@ function drawBoxplot()
             .attr("y2", boxPosition+boxHeight - 10);
 
         chartGroup.append("line")
-            .attr("width", 5)
             .attr("stroke", "black")
             .attr("x1",xScale(median))
             .attr("x2",xScale(median))
