@@ -1,7 +1,7 @@
 function arrayOccurrences(arr) {
     var number = [], occurrences = [], prev;
     
-    arr.sort();
+    //arr.sort();
     for ( var i = 0; i < arr.length; i++ ) {
         if ( arr[i] !== prev ) {
             number.push(arr[i]);
@@ -18,44 +18,48 @@ function arrayOccurrences(arr) {
 function histogram(img)
 {
     var width = 600, height = 300, margin = 30;
-    var chartWidth =  256; // width - (margin*2);
+    var chartWidth = width - (margin*2); // 256
     var chartHeight = height - (margin*2);
-    var barWidth = 10, barPadding = 5;
+    var barWidth = 1, barPadding = 5;
 
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
+    canvas.height = img.height; // Set canvas
+    canvas.width = img.width;
     ctx.drawImage(img, 0, 0);
     img.style.display = 'none';
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     var data = imageData.data;
 
     // Laddar in datan
-    var heights = [], names = [];
+    var heights = [];
     for(var i = 0; i < data.length; i += 4)
     {
         // Avrundar värderna ifall bilden inte skulle vara svartvit
         var avg = (data[i] + data[i + 1] + data[i + 2]) / 3; 
         heights.push(avg);
-        names.push(avg);
     }
+    console.log("heights");
     console.log(heights);
-    console.log(names);
     var result = arrayOccurrences(heights);
+    console.log("result");
     console.log(result);
     var pixels = [], amount = [];
     pixels.push(result[0]);
     amount.push(result[1]);
+    console.log("pixels");
     console.log(pixels);
+    console.log("amount");
     console.log(amount);
 
 
-    var antalKlasser = heights.length;
+    var antalKlasser = result[1].length;
 
     var xScale = d3.scaleBand()
     .domain(antalKlasser)
     .range([0,chartWidth]);
     var yScale = d3.scaleLinear()
-        .domain([0,d3.max(heights)])
+        .domain([0,d3.max(result[1])])
         .range([chartHeight, 0]);
     // Skapa Y och X axel
     var xAxis = d3.axisBottom(xScale);
@@ -71,12 +75,12 @@ function histogram(img)
     var chartGroup = canvas.append("g").attr("transform", "translate("+margin+","+margin+")");
 
     // Rita in staplar
-    chartGroup.selectAll("staplar").data(antalKlasser).enter()
+    chartGroup.selectAll("staplar").data(result[1]).enter()
         .append("rect")
         .attr("width", barWidth)
-        .attr("height", function(data2, i) { return chartHeight - yScale(data2) } )
-        .attr("x", function(data2, i) { return i * (chartWidth / antalKlasser) + barWidth/2 } )
-        .attr("y", function(data2, i) { return yScale(data2) } );
+        .attr("height", function(data, i) { return chartHeight - yScale(data) } )
+        .attr("x", function(data, i) { return i * (chartWidth / antalKlasser) } ) //  barWidth + barPadding
+        .attr("y", function(data, i) { return yScale(data) } );
     
     // Rita axlar
     chartGroup.append("g").call(yAxis);
