@@ -11,16 +11,12 @@
 <body>
     <h1>Läs in en bild med JS</h1>
     <!-- New Code -->
-    <div class="hidden">
-        <pre class="brush: html;">
+<!-- 
     <input type="button" id="grayscalebtn" value="Grayscale">
-    <input type="button" id="invertbtn" value="Invert">
+    <input type="button" id="invertbtn" value="Invert"> -->
     <!-- Old Code -->
     <canvas id="canvas" width="300" height="227"></canvas>
-    </pre>
-    </div>
 
-    <pre class="brush: js">
         <script>
         var img = new Image();
         img.src = 'image.jpg';
@@ -29,45 +25,62 @@
             drawHistogram3(this);
         };
 
-        function draw(img) {
-            var canvas = document.getElementById('canvas');
-            var ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            img.style.display = 'none';
-            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            var data = imageData.data;
+        // function draw(img) {
+        //     var canvas = document.getElementById('canvas');
+        //     var ctx = canvas.getContext('2d');
+        //     ctx.drawImage(img, 0, 0);
+        //     img.style.display = 'none';
+        //     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        //     var data = imageData.data;
                 
-            var invert = function() {
-                for (var i = 0; i < data.length; i += 4) {
-                    data[i]     = 255 - data[i];     // red
-                    data[i + 1] = 255 - data[i + 1]; // green
-                    data[i + 2] = 255 - data[i + 2]; // blue
-                }
-                ctx.putImageData(imageData, 0, 0);
-            };
+        //     var invert = function() {
+        //         for (var i = 0; i < data.length; i += 4) {
+        //             data[i]     = 255 - data[i];     // red
+        //             data[i + 1] = 255 - data[i + 1]; // green
+        //             data[i + 2] = 255 - data[i + 2]; // blue
+        //         }
+        //         ctx.putImageData(imageData, 0, 0);
+        //     };
 
-            var grayscale = function() {
-                for (var i = 0; i < data.length; i += 4) {
-                    var avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-                    data[i]     = avg; // red
-                    data[i + 1] = avg; // green
-                    data[i + 2] = avg; // blue
-                }
-                ctx.putImageData(imageData, 0, 0);
-            };
+        //     var grayscale = function() {
+        //         for (var i = 0; i < data.length; i += 4) {
+        //             var avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+        //             data[i]     = avg; // red
+        //             data[i + 1] = avg; // green
+        //             data[i + 2] = avg; // blue
+        //         }
+        //         ctx.putImageData(imageData, 0, 0);
+        //     };
 
-            var invertbtn = document.getElementById('invertbtn');
-            invertbtn.addEventListener('click', invert);
-            var grayscalebtn = document.getElementById('grayscalebtn');
-            grayscalebtn.addEventListener('click', grayscale);
+        //     var invertbtn = document.getElementById('invertbtn');
+        //     invertbtn.addEventListener('click', invert);
+        //     var grayscalebtn = document.getElementById('grayscalebtn');
+        //     grayscalebtn.addEventListener('click', grayscale);
+        // }
+        // Denna tar en array med värden och räknar ut hur många gånger ett värde finns i arrayen
+        function arrayOccurrences(arr) {
+            var number = [], occurrences = [], prev;
+            
+            arr.sort();
+            for ( var i = 0; i < arr.length; i++ ) {
+                if ( arr[i] !== prev ) {
+                    number.push(arr[i]);
+                    occurrences.push(1);
+                } else {
+                    occurrences[occurrences.length-1]++;
+                }
+                prev = arr[i];
+            }
+            
+            return [number, occurrences];
         }
         
         function drawHistogram3(img)
         {
             var width = 600, height = 300, margin = 30;
-            var chartWidth =  width - (margin*2);
+            var chartWidth =  256; // width - (margin*2);
             var chartHeight = height - (margin*2);
-            var barWidth = 1, barPadding = 5;
+            var barWidth = 10, barPadding = 5;
 
             var canvas = document.getElementById('canvas');
             var ctx = canvas.getContext('2d');
@@ -87,6 +100,14 @@
             }
             console.log(heights);
             console.log(names);
+            var result = arrayOccurrences(heights);
+            console.log(result);
+            var pixels = [], amount = [];
+            pixels.push(result[0]);
+            amount.push(result[1]);
+            console.log(pixels);
+            console.log(amount);
+
 
             var antalKlasser = heights.length;
 
@@ -122,9 +143,8 @@
             chartGroup.append("g").call(xAxis)
                 .attr("transform", "translate(0,"+chartHeight+")");
         }
-        // drawHistogram3(this);
+        //drawHistogram3(this);
         </script>
-            </pre>
             
     
 </body>
