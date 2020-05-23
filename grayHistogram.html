@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Histogram</title>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="grayHistogram.js"></script>
+</head>
+<body>
+
+    <h1>Histogram av en grayscale bild</h1>
+    <input type="file" id="infile">
+    <!-- Old Code -->
+    <img id="input" src="image.jpg" alt="huntten" hidden="true" />
+    <canvas id="canvas"></canvas>
+    
+    <script>
+    var img = new Image();
+    img.src = 'image.jpg';
+
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    
+    window.onload = function() {
+        
+        var img = document.getElementById("input");
+        canvas.height = img.height; //kanske onödig
+        canvas.width = img.width;
+        context.drawImage(img,0,0);
+        var imageData = context.getImageData(0,0, img.width, img.height);
+        console.log(imageData);
+        // Reagera på uppladdad fil
+        document.getElementById("infile").addEventListener("change", handleFile);
+
+    }
+
+    function handleFile(event) 
+    {
+        var reader = new FileReader; // Object with sole purpose of reading data from Blob
+        reader.readAsDataURL(event.target.files[0]); // Read binary data encode as B64
+        reader.onload = function(ev)
+        {
+            var img = new Image;
+            img.src = ev.target.result;
+            img.onload = function ()
+            {
+                canvas.height = img.height; // Set canvas
+                canvas.width = img.width;
+                context.drawImage(img,0,0);
+                var imageData = context.getImageData(0,0, img.width, img.height);
+
+                d3.selectAll("svg").remove();
+                histogram(this);
+            }
+        }
+    }
+
+
+
+    </script>
+          
+</body>
+</html>
