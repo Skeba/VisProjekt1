@@ -1,3 +1,4 @@
+// Denna funktion tar en array och ger tillbaka två. RÄknar hur många gånger något occur i en array
 function arrayOccurrences(array) {
     var number = [], occurrences = [], prev;
     // Vi vill behålla vår array, så vi använder slice istället för push
@@ -19,10 +20,10 @@ function arrayOccurrences(array) {
 
 function histogram(img)
 {
-    var width = 600, height = 300, margin = 30;
-    var chartWidth = width - (margin*2); // 256
+    var width = 600, height = 300, margin = 40;
+    var chartWidth = 256; //width - (margin*2);
     var chartHeight = height - (margin*2);
-    var barWidth = 1, barPadding = 5;
+    var barWidth = 1, barPadding = 1;
 
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
@@ -62,7 +63,7 @@ function histogram(img)
 
     var xScale = d3.scaleBand()
     .domain(antalKlasser)
-    .range([0,chartWidth]);
+    .range([0,chartWidth + barPadding]);
     var yScale = d3.scaleLinear()
         .domain([0,d3.max(amount[0])])
         .range([chartHeight, 0]);
@@ -84,12 +85,12 @@ function histogram(img)
         .append("rect")
         .attr("width", barWidth)
         .attr("height", function(data, i) { return chartHeight - yScale(data) } )
-        .attr("x", function(data, i) { return i * (chartWidth / antalKlasser) } ) //  barWidth + barPadding
+        .attr("x", function(data, i) { return i * (chartWidth / antalKlasser) + barPadding } ) //  barWidth + barPadding
         .attr("y", function(data, i) { return yScale(data) } );
     
     // Rita axlar
-    chartGroup.append("g").call(yAxis);
+    chartGroup.append("g").call(yAxis).style("color", "grey");
     chartGroup.append("g").call(xAxis)
-        .attr("transform", "translate(0,"+chartHeight+")");
+        .attr("transform", "translate(0,"+chartHeight+")").style("color", "grey");
 
 };
