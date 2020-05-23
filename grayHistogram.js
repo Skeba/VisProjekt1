@@ -35,31 +35,21 @@ function histogram(img)
     var data = imageData.data;
 
     // Laddar in datan
-    var heights = [];
+    var pixelData = [];
     for(var i = 0; i < data.length; i += 4)
     {
         // Avrundar värderna ifall bilden inte skulle vara svartvit
         var avg = (data[i] + data[i + 1] + data[i + 2]) / 3; 
-        heights.push(avg);
+        pixelData.push(avg);
     }
-    console.log("heights");
-    console.log(heights);
-    var result = arrayOccurrences(heights);
-    console.log("result");
-    console.log(result);
+
+    var result = arrayOccurrences(pixelData);
     var pixels = [], amount = [];
     pixels.push(result[0]);
     amount.push(result[1]);
-    console.log("pixels");
-    console.log(pixels);
-    console.log("amount");
-    console.log(amount);
-    console.log(amount[0][0]);
-    console.log(heights);
-
 
     var antalKlasser = result[1].length;
-    console.log(antalKlasser);
+
 
     var xScale = d3.scaleBand()
     .domain(antalKlasser)
