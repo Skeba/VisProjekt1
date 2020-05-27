@@ -1,6 +1,25 @@
+var api_url = 'https://api.covid19api.com/live/country/finland/status/confirmed/date/2020-03-21T13:13:30Z';
+    
+async function getData() {
+    var response = await fetch(api_url);
+    var data3 = await response.json();
+    console.log(data3);
+    console.log(data3[0].Confirmed);
+    var { Confirmed, Deaths } = data3[0];
+    console.log(Confirmed);
+    console.log(Deaths);
+}
 function drawForce()
 {
-    d3.json("nodes.json", function(jsonData) {
+
+    d3.json("nodes.json", async function(jsonData) { //nodes.json
+        var response = await fetch(api_url);
+        var data3 = await response.json();
+        console.log(data3);
+        console.log(data3[0].Confirmed);
+        var { Confirmed, Deaths } = data3[0];
+        console.log(Confirmed);
+        console.log(Deaths);
 
         var width = 800, height = 800;
 
@@ -74,26 +93,16 @@ function drawForce()
             d.fy = d.y;
           }
           
-          function dragged(d) {
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
-          }
-          
-          function dragended(d) {
-            if (!d3.event.active) simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
-          }
-
+        function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+        }
         
+        function dragended(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+        }
 
-        function overHandler(ev)
-        {
-            d3.select(this).append("title").text(ev.name); // "d" eller "data" är samma sak
-        };
-        function outHandler()
-        {
-            d3.select(this).selectAll("title").remove();
-        };
     });
 };
