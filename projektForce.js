@@ -24,8 +24,10 @@ function drawForce()
             .attr("ry", 20)
             .attr("stroke", "black")
             .attr("fill", "lightgray")
-            .on("mouseover", overHandler)
-            .on("mouseout", outHandler);
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
 
         var label = canvas.append("g").selectAll("labels")
             .data(jsonData.nodes).enter()
@@ -65,6 +67,23 @@ function drawForce()
                 .attr("y1", function(data) { return data.source.y } )
                 .attr("y2", function(data) { return data.target.y } );
         }
+
+        function dragstarted(d) {
+            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          }
+          
+          function dragged(d) {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+          }
+          
+          function dragended(d) {
+            if (!d3.event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+          }
 
         
 
