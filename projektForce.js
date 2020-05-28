@@ -21,6 +21,8 @@ function drawForce()
         console.log(Confirmed);
         console.log(Deaths);
 
+        console.log(jsonData);
+
         var width = 800, height = 800;
 
         var canvas = d3.select("body").append("svg")
@@ -28,10 +30,10 @@ function drawForce()
             .attr("height", height);
 
         // Skapa länkar (lines) - streck mellan noderna
-        var link = canvas.append("g").selectAll("links")
-            .data(jsonData.links).enter()
-            .append("line")
-            .attr("stroke", "black");
+        // var link = canvas.append("g").selectAll("links")
+        //     .data(jsonData.links).enter()
+        //     .append("line")
+        //     .attr("stroke", "black");
 
         // Skapa noder (cirklar) med vänner
         var node = canvas.append("g").selectAll("nodes")
@@ -66,6 +68,7 @@ function drawForce()
             .force("charge", d3.forceManyBody().strength(-200) )
             // Centreringskraften skuffar alla noder emot mitten
             .force("center",d3.forceCenter(width/2,height/2) );
+        console.log(jsonData.links);
 
         // Vi måste starta vår simulation och köra den on("tick")
         simulation.nodes(jsonData.nodes).on("tick", tickHandler);
@@ -79,12 +82,12 @@ function drawForce()
                 .attr("cy", function(data) { return data.y} )
             label
                 .attr("x", function(data) { return data.x} )
-                .attr("y", function(data) { return data.y + 5 } )
-            link
-                .attr("x1", function(data) { return data.source.x } )
-                .attr("x2", function(data) { return data.target.x } )
-                .attr("y1", function(data) { return data.source.y } )
-                .attr("y2", function(data) { return data.target.y } );
+                .attr("y", function(data) { return data.y + 5 } );
+            // link
+            //     .attr("x1", function(data) { return data.source.x } )
+            //     .attr("x2", function(data) { return data.target.x } )
+            //     .attr("y1", function(data) { return data.source.y } )
+            //     .attr("y2", function(data) { return data.target.y } );
         }
 
         function dragstarted(d) {
