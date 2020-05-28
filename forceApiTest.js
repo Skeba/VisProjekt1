@@ -31,10 +31,10 @@ function drawForce()
             .attr("height", height);
 
         // Skapa länkar (lines) - streck mellan noderna
-        // var link = canvas.append("g").selectAll("links")
-        //     .data(jsonData.links).enter()
-        //     .append("line")
-        //     .attr("stroke", "black");
+        var link = canvas.append("g").selectAll("links")
+            .data(jsonData).enter()
+            .append("line")
+            .attr("stroke", "black");
 
         // Skapa noder (cirklar) med vänner
         var datesNode = canvas.append("g").selectAll("nodes")
@@ -113,15 +113,27 @@ function drawForce()
             .attr("font-size", 13)
             .text(function(data) { 
                 return data.Deaths } );
+        console.log(jsonData[0].Date);
+        var dataArray = {
+            nodes: [
+                { name: jsonData[0].Date, id: 1 },
+                { name: jsonData[0].Confirmed, id: 2 },
+                { name: jsonData[0].Deaths, id: 3 }
+            ],
+            links: [
+                { source: 1, target: 2},
+                { source: 1, target: 2}
+            ]
+        };
 
         
 
         // Definiera en kraft (gravity)
         var simulation = d3.forceSimulation()
             // Länkarna behöver en ny typ av kraft (enligt önskad längd)
-            // .force("link", d3.forceLink().distance(75).id( function(d) { 
-            //     //console.log(d.Date);
-            //     return d[0] } ) )
+            .force("link", d3.forceLink().distance(75).id( function(d) { 
+                //console.log(d.Date);
+                return d[0] } ) )
             // Manybody simulerar gravity (pull) eller electrostatic charge (repulsion)
             .force("charge", d3.forceManyBody().strength(-25) )
             // Centreringskraften skuffar alla noder emot mitten
@@ -130,7 +142,7 @@ function drawForce()
         // Vi måste starta vår simulation och köra den on("tick")
         simulation.nodes(jsonData).on("tick", tickHandler);
         // Simulera även länkarnas krafter
-        //simulation.force("link").links(jsonData);
+        simulation.force("link").links(jsonData);
 
         function tickHandler() {
             // Vad ska göras varje tick
@@ -154,7 +166,7 @@ function drawForce()
                 
             deaths
                 .attr("x", function(data) { return data.x / 1.07} )
-                .attr("y", function(data) { return data.y / 1.07 + 5 } );
+                .attr("y", function(data) { return data.y / 1.07 + 5 } )
             // link
             //     .attr("x1", function(data) { return data.source.x } )
             //     .attr("x2", function(data) { return data.target.x } )

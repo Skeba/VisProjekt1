@@ -30,10 +30,10 @@ function drawForce()
             .attr("height", height);
 
         // Skapa länkar (lines) - streck mellan noderna
-        // var link = canvas.append("g").selectAll("links")
-        //     .data(jsonData.links).enter()
-        //     .append("line")
-        //     .attr("stroke", "black");
+        var link = canvas.append("g").selectAll("links")
+            .data(jsonData.links).enter()
+            .append("line")
+            .attr("stroke", "black");
 
         // Skapa noder (cirklar) med vänner
         var node = canvas.append("g").selectAll("nodes")
@@ -83,11 +83,11 @@ function drawForce()
             label
                 .attr("x", function(data) { return data.x} )
                 .attr("y", function(data) { return data.y + 5 } );
-            // link
-            //     .attr("x1", function(data) { return data.source.x } )
-            //     .attr("x2", function(data) { return data.target.x } )
-            //     .attr("y1", function(data) { return data.source.y } )
-            //     .attr("y2", function(data) { return data.target.y } );
+            link
+                .attr("x1", function(data) { return data.source.x } )
+                .attr("x2", function(data) { return data.target.x } )
+                .attr("y1", function(data) { return data.source.y } )
+                .attr("y2", function(data) { return data.target.y } );
         }
 
         function dragstarted(d) {
