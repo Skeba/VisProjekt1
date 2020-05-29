@@ -21,7 +21,7 @@ function arrayOccurrences(array) {
 function histogram(img)
 {
     var width = 600, height = 300, margin = 40;
-    var chartWidth = 256; //width - (margin*2);
+    var chartWidth = 255; //width - (margin*2);
     var chartHeight = height - (margin*2);
     var barWidth = 1, barPadding = 1;
 
