@@ -12,13 +12,77 @@
 
     <h1>Histogram av en grayscale bild</h1>
     <input type="file" id="infile">
+
+    <input type="text" id="url" value="" />
+    <input type="button" id="btn" value="Enter URL" />
+
     <!-- Old Code -->
     <img id="input" src="image.jpg" alt="huntten" hidden="true" />
     <canvas id="canvas"></canvas>
+    <img id="myImage" src="https://ichef.bbci.co.uk/news/660/cpsprodpb/AAE7/production/_111515734_gettyimages-1208779325.jpg" crossOrigin="anonymous">
+    <img id="result">
     
     <script>
-    var img = new Image();
-    img.src = 'image.jpg';
+    function toDataURL(url, callback)
+    {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', url);
+        xhr.responseType = 'blob';
+        xhr.onload = function(){
+        var fr = new FileReader();
+        
+        fr.onload = function(){
+            callback(this.result);
+        };
+        
+        fr.readAsDataURL(xhr.response); // async call
+
+        };
+       
+        xhr.send();
+    }
+    toDataURL(myImage.src, function(dataURL)
+    {
+        result.src = dataURL;
+       
+        var img = new Image;
+        img.src = dataURL;
+        img.onload = function ()
+        {
+            canvas.height = img.height; // Set canvas
+            canvas.width = img.width;
+            context.drawImage(img,0,0);
+            var imageData = context.getImageData(0,0, img.width, img.height);
+
+            d3.selectAll("svg").remove();
+            console.log(this);
+            histogram(this);
+        }
+        
+        //histogram(dataURL);
+
+        // now just to show that passing to a canvas doesn't hold the same results
+        // var canvas = document.createElement('canvas');
+        // canvas.width = myImage.naturalWidth;
+        // canvas.height = myImage.naturalHeight;
+        // canvas.getContext('2d').drawImage(myImage, 0,0);
+
+        // console.log(canvas.toDataURL() === dataURL); // false - not same data
+    });
+
+    // document.getElementById('btn').onclick = function() 
+    // {
+    //         var url = document.getElementById('url').value;
+    //             src = url,
+    //             img = document.createElement('img');
+
+    //         img.src = src;
+    //         console.log(img);
+    //         //histogram(img);
+    //         //document.body.appendChild(img);
+    // }
+    // var img = new Image();
+    // img.src = 'image.jpg';
 
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext("2d");
@@ -52,6 +116,7 @@
                 var imageData = context.getImageData(0,0, img.width, img.height);
 
                 d3.selectAll("svg").remove();
+                console.log(this);
                 histogram(this);
             }
         }
