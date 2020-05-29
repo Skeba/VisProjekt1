@@ -12,13 +12,55 @@
 
     <h1>Histogram av en grayscale bild</h1>
     <input type="file" id="infile">
+
+    <input type="text" id="url" value="" />
+    <input type="button" id="btn" value="Enter URL" onclick="runUrlData();"/>
+
     <!-- Old Code -->
     <img id="input" src="image.jpg" alt="huntten" hidden="true" />
     <canvas id="canvas"></canvas>
     
     <script>
-    var img = new Image();
-    img.src = 'image.jpg';
+    function runUrlData()
+    {
+
+    
+        function toDataURL(url, callback)
+        {
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', url);
+            xhr.responseType = 'blob';
+            xhr.onload = function(){
+            var fr = new FileReader();
+            
+            fr.onload = function(){
+                callback(this.result);
+            };
+            
+            fr.readAsDataURL(xhr.response); // async call
+
+            };
+        
+            xhr.send();
+        }
+        toDataURL(url.value, function(dataURL)
+        {
+        
+            var img = new Image;
+            img.src = dataURL;
+            img.onload = function ()
+            {
+                canvas.height = img.height; // Set canvas
+                canvas.width = img.width;
+                context.drawImage(img,0,0);
+                var imageData = context.getImageData(0,0, img.width, img.height);
+
+                d3.selectAll("svg").remove();
+                console.log(this);
+                histogram(this);
+            }
+            
+        })};
 
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext("2d");
@@ -52,6 +94,7 @@
                 var imageData = context.getImageData(0,0, img.width, img.height);
 
                 d3.selectAll("svg").remove();
+                console.log(this);
                 histogram(this);
             }
         }
