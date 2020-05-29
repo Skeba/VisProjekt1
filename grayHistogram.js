@@ -34,6 +34,10 @@ function histogram(img)
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     var data = imageData.data;
 
+    var bin = ["15", "45",  "75", "105", "135"
+                , "165",  "195", "225"];
+    
+
     // Laddar in datan
     var pixelData = [];
     for(var i = 0; i < data.length; i += 4)
@@ -50,10 +54,31 @@ function histogram(img)
 
     var antalKlasser = result[1].length;
 
+    // Ändra y axeln till frekvenser
+    var frekvenser = []; // Spara antalet spelare av en viss längd
+    var klassStorlek = 15; // binsize 160-169
+    var klass = 0; // håller koll på vilken klass vi är i. Börjar med minsta
+    var binsize = bin.length;
+
+    // Räkna antalet spelare i varje längdklass
+    for(i=0; i<binsize; i++)
+    {
+        var frekvens = 0; // Iterand som räknar hur många som hör till en klass
+        for (j=0; j < pixels.length; j++)
+        {
+            if (pixels[j] >= klass && pixels[j] < klass+klassStorlek)
+            {
+                frekvens++;
+            }
+        }
+        klass += klassStorlek;
+        frekvenser.push(frekvens);
+    }
+
 
     var xScale = d3.scaleBand()
-    .domain(antalKlasser)
-    .range([0,chartWidth + barPadding]);
+    .domain(bin)
+    .range([0,chartWidth]);
     var yScale = d3.scaleLinear()
         .domain([0,d3.max(amount[0])])
         .range([chartHeight, 0]);
@@ -75,7 +100,7 @@ function histogram(img)
         .append("rect")
         .attr("width", barWidth)
         .attr("height", function(data, i) { return chartHeight - yScale(data) } )
-        .attr("x", function(data, i) { return i * (chartWidth / antalKlasser) + barPadding } ) //  barWidth + barPadding
+        .attr("x", function(data, i) { return i * (chartWidth / antalKlasser) } ) //  barWidth + barPadding
         .attr("y", function(data, i) { return yScale(data) } );
     
     // Rita axlar
